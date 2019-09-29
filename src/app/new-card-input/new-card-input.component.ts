@@ -1,5 +1,13 @@
-import { Component, OnInit, HostBinding, Output, EventEmitter, HostListener, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import {
+  Component,
+  OnInit,
+  HostBinding,
+  Output,
+  EventEmitter,
+  HostListener,
+  ViewChild
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 @Component({
   selector: 'app-new-card-input',
   templateUrl: './new-card-input.component.html',
@@ -8,27 +16,32 @@ import { NgForm } from '@angular/forms';
 export class NewCardInputComponent implements OnInit {
   @HostBinding('class') classes = 'col-4';
 
-  public newCard: any = {text: ''};
+  public newCard: any = { text: '' };
 
   @Output() cardAdd = new EventEmitter<string>();
 
-  @ViewChild('form', {static: true}) public form: NgForm;
+  newCardForm: FormGroup;
 
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.code === 'Enter' && this.form.valid) {
-      this.addCard(this.newCard.text);
+    if (event.code === 'Enter' && this.newCardForm.valid) {
+      this.addCard(this.newCardForm.controls.text.value);
     }
   }
 
   addCard(text: any) {
     this.cardAdd.emit(text);
-    this.newCard.text = '';
+    this.newCardForm.controls.text.setValue('');
   }
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor(fb: FormBuilder) {
+    this.newCardForm = fb.group({
+      text: [
+        '',
+        Validators.compose([Validators.required, Validators.minLength(2)])
+      ]
+    });
   }
 
+  ngOnInit() {}
 }

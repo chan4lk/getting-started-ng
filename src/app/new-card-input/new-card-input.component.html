@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-block">
-    <form novalidate #form="ngForm">
-      <input [(ngModel)]="newCard.text" name="text" placeholder="Take a note..." class="form-control" required>
+    <form novalidate [formGroup]="newCardForm">
+      <input name="text" placeholder="Take a note..." class="form-control" formControlName="text">
   </form>
   </div>
 </div>
