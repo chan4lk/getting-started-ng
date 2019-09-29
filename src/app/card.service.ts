@@ -37,8 +37,10 @@ export class CardService {
     return card;
   }
 
-  createCard(card: Card): void {
-    this.cardsRef.push(card);
+  createCard(card: Card): Card {
+    const result = this.cardsRef.push(card);
+    card.$key = result.key;
+    return card;
   }
 
   updateCard(key: string, value: any): void {

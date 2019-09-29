@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { takeWhile, debounceTime, filter } from "rxjs/operators";
 import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
+import { Card } from '../model/card';
 @Component({
   selector: 'app-new-card-input',
   templateUrl: './new-card-input.component.html',
@@ -17,7 +18,7 @@ import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 export class NewCardInputComponent implements OnInit, OnDestroy {
   @HostBinding('class') classes = 'col-4';
 
-  @Output() cardAdd = new EventEmitter<string>();
+  @Output() cardAdd = new EventEmitter<Card>();
 
   newCardForm: FormGroup;
   alive = true;
@@ -30,7 +31,7 @@ export class NewCardInputComponent implements OnInit, OnDestroy {
   }
 
   addCard(text: any) {
-    this.cardAdd.emit(text);
+    this.cardAdd.emit(new Card(text));
     this.newCardForm.controls.text.setValue('');
   }
 

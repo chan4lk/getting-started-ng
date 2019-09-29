@@ -9,6 +9,10 @@ import { CardService as CardService } from './card.service';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
+import { EffectsModule } from '@ngrx/effects';
+import { CardEffects } from './effects/cards';
 
 @NgModule({
   declarations: [
@@ -22,7 +26,9 @@ import { environment } from 'src/environments/environment';
     FormsModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    StoreModule.forRoot(reducers, {metaReducers}),
+    EffectsModule.forRoot([CardEffects])
   ],
   providers: [CardService],
   bootstrap: [AppComponent]
