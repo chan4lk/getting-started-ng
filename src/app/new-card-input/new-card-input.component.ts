@@ -5,22 +5,22 @@ import {
   Output,
   EventEmitter,
   HostListener,
-  ViewChild
+  OnDestroy
 } from '@angular/core';
+import { takeWhile, debounceTime, filter } from "rxjs/operators";
 import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 @Component({
   selector: 'app-new-card-input',
   templateUrl: './new-card-input.component.html',
   styleUrls: ['./new-card-input.component.scss']
 })
-export class NewCardInputComponent implements OnInit {
+export class NewCardInputComponent implements OnInit, OnDestroy {
   @HostBinding('class') classes = 'col-4';
-
-  public newCard: any = { text: '' };
 
   @Output() cardAdd = new EventEmitter<string>();
 
   newCardForm: FormGroup;
+  alive = true;
 
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -41,7 +41,18 @@ export class NewCardInputComponent implements OnInit {
         Validators.compose([Validators.required, Validators.minLength(2)])
       ]
     });
+    this.newCardForm.valueChanges.pipe(
+      filter((value) => this.newCardForm.valid),
+      debounceTime(500),
+      takeWhile(() => this.alive)
+    ).subscribe(data => {
+      console.log(data);
+    });
   }
 
   ngOnInit() {}
+
+  ngOnDestroy() {
+    this.alive = false;
+  }
 }
