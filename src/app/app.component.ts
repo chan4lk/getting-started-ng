@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { CardService } from './card.service';
+import { Observable } from 'rxjs';
+import { Card } from './model/card';
 
 @Component({
   selector: 'app-root',
@@ -6,21 +9,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  public cards: Array<any> = [
-    {text: 'Card 1'},
-    {text: 'Card 2'},
-    {text: 'Card 3'},
-    {text: 'Card 4'},
-    {text: 'Card 5'},
-    {text: 'Card 6'},
-    {text: 'Card 7'},
-    {text: 'Card 8'},
-    {text: 'Card 9'},
-    {text: 'Card 10'}
-  ];
+  public cards$: Observable<Card[]>;
+
   title = 'getting-started-ng5';
 
+  constructor(private cardService: CardService) {
+    this.cards$ = this.cardService.getCardList();
+  }
+
   addCard(cardText: string) {
-    this.cards.push({text: cardText});
+    this.cardService.createCard(new Card(cardText));
   }
 }
