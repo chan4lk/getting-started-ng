@@ -36,7 +36,9 @@ export class CardEffects {
     map((action: Cards.Add) => action.payload),
     exhaustMap(payload => {
       const card = this.cardService.createCard(payload);
-      return of(null);
+      if (card.$key) {
+        return of(new Cards.LoadSuccess([card]));
+      }
     })
   );
 

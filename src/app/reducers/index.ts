@@ -1,28 +1,24 @@
 import * as fromCards from './cards';
-import { ActionReducerMap, ActionReducer, MetaReducer, createFeatureSelector, createSelector } from '@ngrx/store';
-import { storeLogger } from 'ngrx-store-logger';
-import { environment } from 'src/environments/environment.prod';
+import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
+import * as fromRoot from './root';
 
-export interface State {
+export interface CardsState {
   cards: fromCards.State;
 }
 
-export const reducers: ActionReducerMap<State> = {
+export interface State extends fromRoot.State {
+  cards: CardsState;
+}
+
+export const reducers = {
   cards: fromCards.reducer
 };
 
-export function logger(reducer: ActionReducer<State>): any {
-  return storeLogger()(reducer);
-}
 
-export const metaReducers: MetaReducer<State>[] = !environment.production
-? [logger]
-: [];
-
-export const getCardsState = createFeatureSelector<fromCards.State>('cards');
+export const getCardsState = createFeatureSelector<CardsState>('cards');
 export const getCards = createSelector(
   getCardsState,
-  state => state.cards
+  state => state.cards.cards
 );
 
 

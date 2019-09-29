@@ -8,9 +8,7 @@ import { Observable } from 'rxjs';
 import { Card } from './model/card';
 import { map } from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CardService {
   private basePath = 'cards';
 
