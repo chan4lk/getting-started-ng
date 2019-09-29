@@ -13,13 +13,24 @@ import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { CardEffects } from './effects/cards';
+import { Routes, RouterModule, Router } from '@angular/router';
+import { AboutComponent } from './about/about.component';
+import { MainComponent } from './main/main.component';
+
+const routes: Routes = [
+  {path: '', redirectTo: 'cards', pathMatch: 'full'},
+  {path: 'cards', component: MainComponent},
+  {path: 'about', component: AboutComponent},
+];
 
 @NgModule({
   declarations: [
     AppComponent,
     CardComponent,
     CardListComponent,
-    NewCardInputComponent
+    NewCardInputComponent,
+    AboutComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +39,8 @@ import { CardEffects } from './effects/cards';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     StoreModule.forRoot(reducers, {metaReducers}),
-    EffectsModule.forRoot([CardEffects])
+    EffectsModule.forRoot([CardEffects]),
+    RouterModule.forRoot(routes, {useHash: true})
   ],
   providers: [CardService],
   bootstrap: [AppComponent]
