@@ -19,4 +19,8 @@ export class AppComponent {
     {text: 'Card 10'}
   ];
   title = 'getting-started-ng5';
+
+  addCard(cardText: string) {
+    this.cards.push({text: cardText});
+  }
 }
